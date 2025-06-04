@@ -1,0 +1,63 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/opt/ros/humble/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/ground_seg/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/localization/ROBIN/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/localization/fast_LIMO/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/localization/nano_gicp/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/localization/odometry_to_tf/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/navigation/mappi/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/navigation/tools/xtensor/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/navigation/tools/xtl/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/curb/LiDAR-CURB-DETECTION/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/grid_map/grid_map_core/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/grid_map/grid_map_costmap_2d/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/grid_map/grid_map_cv/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/grid_map/grid_map_demos/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/grid_map/grid_map_filters/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/grid_map/grid_map_loader/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/grid_map/grid_map_octomap/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/grid_map/grid_map_pcl/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/grid_map/grid_map_ros/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/grid_map/grid_map_rviz_plugin/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/grid_map/grid_map_sdf/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/grid_map/grid_map_visualization/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/ground_segment/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/linefit_ground_segmentation/linefit_ground_segmentation/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/patchworkpp/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/scan-fusion/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/semantic_inference/semantic_inference/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/semantic_inference/semantic_inference_ros/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/synesthesia-x/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/synesthesiax/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/traversability_offline/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/preprocessing/urban_road_filter/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/test/Targetless-LiDAR-camera-calibration/cpp/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/autonomous_system/test/pc_on_image/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/iri_code/iri_add/iri_add2_manager/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/iri_code/iri_simulator/iri_add2_controller_hw/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/iri_core/iri_action_server/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/iri_core/iri_base_algorithm/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/iri_core/iri_base_bt_client/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/iri_core/iri_base_driver/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/iri_core/iri_behaviortree/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/iri_core/iri_ros_tools/include/**",
+        "/home/victor/vaive/ona_docker/ona_robot/ona_ws/src/utilities/config_utilities/config_utilities/include/**",
+        "include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
