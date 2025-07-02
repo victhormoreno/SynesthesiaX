@@ -9,7 +9,7 @@
 #include <cv_bridge/cv_bridge.h>
 #include <pcl_conversions/pcl_conversions.h>
 
-ros::Publisher pc_on_img_pub, pc_color_pub, pub_obstacles, pub_traversable;
+ros::Publisher pc_on_img_pub, pc_color_pub, pub_obstacles, pub_traversable, depth_img_pub;
 
 // Projector instance (initialized later)
 Projector projector;
@@ -28,12 +28,22 @@ void callback(const sensor_msgs::PointCloud2ConstPtr &cloud_msg,
     // 2. Get the semantic colored clouds and overlay image (optional)
     pcl::PointCloud<pcl::PointXYZRGB> semanticCloud, travCloud, obstacleCloud;
     projector.getSemanticClouds(semanticCloud, travCloud, obstacleCloud);
-    const cv::Mat& overlay = projector.getOverlay();
 
     // Publish overlay image
-    sensor_msgs::ImagePtr img_msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", overlay).toImageMsg();
-    img_msg->header = cloud_msg->header;  // Keep timestamp/header synced
-    pc_on_img_pub.publish(img_msg);
+    if(pc_on_img_pub.getNumSubscribers() > 0){
+        const cv::Mat& overlay = projector.getOverlay();
+        sensor_msgs::ImagePtr img_msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", overlay).toImageMsg();
+        img_msg->header = cloud_msg->header;  // Keep timestamp/header synced
+        pc_on_img_pub.publish(img_msg);
+    }
+
+    // Publish depth image
+    if(depth_img_pub.getNumSubscribers() > 0){
+        const cv::Mat& depth = projector.getDepthImage();
+        sensor_msgs::ImagePtr img_msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", depth).toImageMsg();
+        img_msg->header = cloud_msg->header;  // Keep timestamp/header synced
+        depth_img_pub.publish(img_msg);
+    }
 
     // Publish semantic colored clouds
     sensor_msgs::PointCloud2 pc_color_msg, pc_obstacles_msg, pc_traversable_msg;
@@ -62,6 +72,7 @@ int main(int argc, char **argv)
     }
 
     pc_on_img_pub   = nh.advertise<sensor_msgs::Image>("cloud_onto_img", 1);
+    depth_img_pub   = nh.advertise<sensor_msgs::Image>("depth_img", 1);
     pc_color_pub    = nh.advertise<sensor_msgs::PointCloud2>("semantic_cloud", 1);
     pub_obstacles   = nh.advertise<sensor_msgs::PointCloud2>("obstacles", 1);
     pub_traversable = nh.advertise<sensor_msgs::PointCloud2>("traversable", 1);

@@ -47,6 +47,11 @@ public:
    * @brief Get semantic overlay image. Computes overlay lazily.
    */
   const cv::Mat& getOverlay();
+  
+  /**
+   * @brief Get depth image. Returns the image created from the depth buffer.
+   */
+  const cv::Mat& getDepthImage();
 
 private:
   // Main modular steps called inside project_cloud_onto_image
@@ -59,14 +64,17 @@ private:
   // Semantic color lookup table (BGR)
   cv::Mat semantic_lut_;
 
+  // Depth color lookup table (BGR)
+  cv::Mat depth_lut_;
+
   // Filtering parameters
   double minRange_, maxRange_;
   double minAngFOV_, maxAngFOV_;
 
   static constexpr int CALIB_W = 1440;
   static constexpr int CALIB_H = 1080;
-  static constexpr int LABEL_W = 500;
-  static constexpr int LABEL_H = 500;
+  static constexpr int LABEL_W = 720;
+  static constexpr int LABEL_H = 540;
 
   // 3D points and their 2D projections
   std::vector<cv::Point3f> pts3d_;
@@ -80,4 +88,8 @@ private:
   // Overlay cache for getOverlay()
   cv::Mat overlay_cache_;
   bool overlay_updated_ = false;
+
+  // Depth cache for getDepthImage()
+  cv::Mat depth_img_cache_;
+  bool depth_img_updated_ = false;
 };

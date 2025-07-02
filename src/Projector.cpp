@@ -7,7 +7,7 @@
 
 // ** Public methods **
 
-Projector::Projector() : overlay_updated_(false)
+Projector::Projector() : overlay_updated_(false), depth_img_updated_(false)
 {}
 
 bool Projector::init(const ros::NodeHandle& nh)
@@ -70,6 +70,38 @@ bool Projector::init(const ros::NodeHandle& nh)
     semantic_lut_.at<cv::Vec3b>(0, 1) = {0, 255,   0};  // Obstacle – green
     semantic_lut_.at<cv::Vec3b>(0, 2) = {255, 0,   0};  // Traversable – blue
 
+    // Create depth LUT: 1 row, 256 columns, 3-channel 8-bit (BGR)
+    depth_lut_ = cv::Mat(1, 256, CV_8UC3);
+
+    for (int i = 0; i < 256; ++i) {
+
+        float t = static_cast<float>(i) / (256 - 1);  // Normalize [0, 1]
+
+        // Custom warm colormap: brown → red → orange → yellow → white
+        uchar r, g, b;
+
+        if (t < 0.25f) { // dark brown to red
+            r = static_cast<uchar>(128 + t * 512);
+            g = static_cast<uchar>(64 * t);
+            b = static_cast<uchar>(32 * (1.0f - t));
+        } else if (t < 0.5f) { // red to orange
+            r = 255;
+            g = static_cast<uchar>(128 * (t - 0.25f) / 0.25f);
+            b = 0;
+        } else if (t < 0.75f) { // orange to yellow
+            r = 255;
+            g = static_cast<uchar>(128 + 127 * (t - 0.5f) / 0.25f);
+            b = 0;
+        } else { // yellow to white
+            r = 255;
+            g = 255;
+            b = static_cast<uchar>(255 * (t - 0.75f) / 0.25f);
+        }
+
+        depth_lut_.at<cv::Vec3b>(0, i) = cv::Vec3b(b, g, r);  // BGR
+    }
+
+    // Fill resolution to K matrix
     K_ = cameraMatrix_.clone();
     double sx = static_cast<double>(LABEL_W) / CALIB_W;
     double sy = static_cast<double>(LABEL_H) / CALIB_H;
@@ -84,8 +116,8 @@ void Projector::project_cloud_onto_image(const sensor_msgs::PointCloud2ConstPtr&
 {
     if (!cloud_msg || !image_msg)
     {
-    ROS_ERROR("Received null cloud or image message");
-    return;
+        ROS_ERROR("Received null cloud or image message");
+        return;
     }
 
     // 1. Convert input image to label matrix
@@ -110,7 +142,8 @@ void Projector::project_cloud_onto_image(const sensor_msgs::PointCloud2ConstPtr&
     // 4. Create depth and index buffers for projected points
     this->createDepthBuffers();
 
-    overlay_updated_ = false;  // Mark overlay cache as dirty
+    overlay_updated_ = false;   // Mark overlay cache as dirty
+    depth_img_updated_ = false; // Mark depth cache as dirty
 }
 
 // ** Private methods **
@@ -161,7 +194,7 @@ void Projector::createDepthBuffers()
                         R_.at<double>(2,1)*p.y + 
                         R_.at<double>(2,2)*p.z + 
                         tvec_.at<double>(2);
-      
+
       if (Zc <= 0) continue;
 
       float& depthValue = depth_buf_.at<float>(v, u);
@@ -198,6 +231,36 @@ const cv::Mat& Projector::getOverlay()
     }
     overlay_updated_ = true;
     return overlay_cache_;
+}
+
+const cv::Mat& Projector::getDepthImage()
+{
+    if(depth_img_updated_)
+        return depth_img_cache_;
+
+    depth_img_cache_ = cv::Mat::zeros(LABEL_H, LABEL_W, CV_8UC3);
+
+    for (int v = 0; v < LABEL_H; ++v)
+    {
+        for (int u = 0; u < LABEL_W; ++u)
+        {
+            const int idx = idx_buf_.at<int>(v, u);
+            if (idx < 0) continue;
+
+            float z = depth_buf_.at<float>(v, u);
+
+            static const float z_min = static_cast<float>(minRange_);
+            static const float z_max = static_cast<float>(maxRange_);
+
+            z = std::max(z_min, std::min(z_max, z)); // clamp
+            int lut_idx = static_cast<int>(((z - z_min) / (z_max - z_min)) * 255); // normalize
+
+            const cv::Vec3b& color = depth_lut_.at<cv::Vec3b>(0, lut_idx);
+            depth_img_cache_.at<cv::Vec3b>(v, u) = color;
+        }
+    }
+    depth_img_updated_ = true;
+    return depth_img_cache_;
 }
 
 void Projector::getSemanticClouds(pcl::PointCloud<pcl::PointXYZRGB>& semanticCloud,
