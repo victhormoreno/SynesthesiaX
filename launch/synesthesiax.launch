@@ -3,7 +3,7 @@
 
     <arg name="name" default="front" doc="Unique name to add to launched nodes (front or back)"/>
 
-    <node name="synesthesiax_node" pkg="synesthesiax" type="synesthesiax_node" output="screen">
+    <node name="synesthesiax_node_$(arg name)" pkg="synesthesiax" type="synesthesiax_node" output="screen">
         <param name="max_range"        value="30" />
         <param name="min_range"        value="0.5" />
         <param name="max_ang_fov"   value=" 60" />
