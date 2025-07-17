@@ -51,6 +51,8 @@ void callback(const sensor_msgs::PointCloud2ConstPtr &cloud_msg,
     pcl::toROSMsg(obstacleCloud, pc_obstacles_msg);
     pcl::toROSMsg(travCloud, pc_traversable_msg);
     pc_color_msg.header = pc_obstacles_msg.header = pc_traversable_msg.header = cloud_msg->header;
+
+    pc_color_msg.header.stamp = pc_obstacles_msg.header.stamp = pc_traversable_msg.header.stamp = ros::Time::now();
     pc_color_pub.publish(pc_color_msg);
     pub_obstacles.publish(pc_obstacles_msg);
     pub_traversable.publish(pc_traversable_msg);
